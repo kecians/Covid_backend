@@ -1,4 +1,3 @@
-from msilib.schema import File
 from django.db.models import fields
 from rest_framework import serializers
 from django.shortcuts import get_object_or_404
