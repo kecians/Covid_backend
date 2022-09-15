@@ -125,7 +125,7 @@ def bed_allotment(request):
         return Response({"data": serializer.errors, "status" : status.HTTP_400_BAD_REQUEST })
 
 
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 @api_view(["GET"])
 def get_alloted_beds(request, **kwargs):
     tbed = BedCount.objects.all()
