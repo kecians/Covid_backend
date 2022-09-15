@@ -65,10 +65,23 @@ class PatientsList(generics.ListAPIView):
     permission_classes = [IsAuthenticated,]
     serializer_class = PatientProfileSerializers
     pagination_class = PatientListPagination
+    # queryset = PatientProfile.objects.all()
 
-    def get_queryset(self):
-        query = self.kwargs.get('id',False) if not self.kwargs.get('id',False) else 'A'
-        queryset = PatientProfile.objects.all().filter(patient_status=query)
+    def get_queryset(self, **kwargs):
+        # print("query \n\n\n\n\n\n\n", self.request.query_params)
+        query = self.request.query_params.get("query", "").lower()
+        status_list = ("active", "migrated", "death", "recovered", "home_isolated")
+        status_dict = {"active" : "A", "migrated" : "M", "death" : "D", "recovered" : "R", "home_isolated" : "H"}
+
+        queryset = PatientProfile.objects.all()
+
+        if query :
+            if query in status_list:
+                queryset   = PatientProfile.objects.filter(patient_status=status_dict[query])
+            else:
+                queryset  = PatientProfile.objects.search(query=query)
+    
+        print("query \n\n\n\n\n\n\n",  )
         return queryset
 
 

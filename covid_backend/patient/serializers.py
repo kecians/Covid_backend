@@ -198,7 +198,7 @@ class PatientProfileSerializers(serializers.ModelSerializer):
         extra_kwargs = {'patient_status': {'write_only': True}, }
   
     def get_patient_health_status(self, obj):
-        hs =  HealthStatus.objects.filter(patient = obj)
+        hs =  HealthStatus.objects.filter(patient = obj).order_by('-id')
         if hs.exists():
             hs = hs.first()
             return hs.get_current_health

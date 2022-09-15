@@ -44,7 +44,7 @@ class HealthStatus(TimeStamped):
     def get_current_health(self):
         return {
             "OL" : self.oxy_level,
-            # "BP" : f"{self.blood_pres_systolic}/{self.blood_pres_diastolic}",
+            "BP" : f"{self.blood_pres_systolic}/{self.blood_pres_diastolic}",
             "PR" : self.pulse_rate,
             "RR" : self.respiration_rate,
             "T" : self.temperature
