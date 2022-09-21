@@ -163,15 +163,28 @@ class PatientDeathSerializers(serializers.ModelSerializer):
 
 
 class PatientCovidTestSerializers(serializers.ModelSerializer):
+    test_type_display = serializers.SerializerMethodField()
+    test_result_display = serializers.SerializerMethodField()
+    
     class Meta:
         model = PatientCovidTest
-        fields = "__all__"
+        fields = ("is_tested", "type", "result", "patient", "test_type_display", "test_result_display" ,"created_on")
+   
+    def get_test_type_display(self, obj):
+        return obj.get_type_display()
 
+    def get_test_result_display(self, obj):
+        return obj.get_result_display()
 
 class VaccineSerializers(serializers.ModelSerializer):
+    vaccine_type_display = serializers.SerializerMethodField()
+
+    def get_vaccine_type_display(self, obj):
+        return obj.get_type_display()
+
     class Meta:
         model = Vaccine
-        fields = "__all__"
+        fields = ("vaccinated_on", "patient", "patient_vaccine", "type", "vaccine_type_display","created_on")
 
 class PatientVaccinationSerializers(serializers.ModelSerializer):
     vaccine_status = VaccineSerializers(many=True, required=False, allow_null=True)
@@ -189,7 +202,7 @@ class PatientProfileSerializers(serializers.ModelSerializer):
     patient_health_status =  serializers.SerializerMethodField()
     patient_condition = serializers.SerializerMethodField()
     patient_status_display = serializers.SerializerMethodField()
- 
+    
 
     class Meta:
         model = PatientProfile
@@ -211,7 +224,7 @@ class PatientProfileSerializers(serializers.ModelSerializer):
         hs =  HealthStatus.objects.filter(patient = obj)
         if hs.exists():
             hs = hs.first()
-            return hs.get_patient_condition
+            return hs.get_patient_condition_display()
         return "NA"
 
 
